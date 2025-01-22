@@ -2,7 +2,9 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
-import { ClerkProvider } from "@clerk/clerk-react";
+import { ClerkProvider, SignIn, SignUp } from "@clerk/clerk-react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./App.tsx";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -13,7 +15,27 @@ if (!PUBLISHABLE_KEY) {
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
-      <App />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/sign-up"
+            element={
+              <div className="flex justify-center items-center h-screen">
+                <SignUp />
+              </div>
+            }
+          />
+          <Route
+            path="/sign-in"
+            element={
+              <div className="flex justify-center items-center h-screen">
+                <SignIn />
+              </div>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
     </ClerkProvider>
   </StrictMode>
 );

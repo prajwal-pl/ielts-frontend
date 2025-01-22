@@ -1,6 +1,7 @@
-import { ChevronLeft, ChevronRight, Volume2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Target, Volume2 } from "lucide-react";
 import { Button } from "./ui/button";
 import { useEffect, useState } from "react";
+import { useSpeechSynthesis } from "@/hooks/useSpeechSynthesis";
 
 interface Question {
   id: number;
@@ -24,6 +25,8 @@ const TestInterface = () => {
   const [questionData, setQuestionData] = useState<Part[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const { speak } = useSpeechSynthesis();
+  const [hasNarrated, setHasNarrated] = useState(false);
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -83,6 +86,20 @@ const TestInterface = () => {
 
   const currentQuestion = questions[currentQuestionIndex];
 
+  useEffect(() => {
+    setHasNarrated(false);
+  }, [currentQuestionIndex]);
+
+  useEffect(() => {
+    if (currentQuestion && !hasNarrated) {
+      speak(currentQuestion.text);
+      if (currentQuestion.subQuestions) {
+        currentQuestion.subQuestions.forEach((sq) => speak(sq));
+      }
+      setHasNarrated(true);
+    }
+  }, [currentQuestion, hasNarrated, speak]);
+
   if (error) {
     return <div className="text-center text-red-500 p-4">{error}</div>;
   }
@@ -128,12 +145,18 @@ const TestInterface = () => {
           >
             <ChevronLeft className="mr-1" /> Prev
           </Button>
-          <Button
-            onClick={handleNext}
-            disabled={isLastQuestion || !questions.length}
-          >
-            <ChevronRight className="mr-1" /> Next
-          </Button>
+          {isLastQuestion || !questions.length ? (
+            <Button className="">
+              <Target className="mr-1" /> Submit
+            </Button>
+          ) : (
+            <Button
+              onClick={handleNext}
+              disabled={isLastQuestion || !questions.length}
+            >
+              <ChevronRight className="mr-1" /> Next
+            </Button>
+          )}
         </div>
       </div>
     </div>
