@@ -50,7 +50,9 @@ const TestInterface = ({ userId }: TestInterfaceProps) => {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/questions");
+        const response = await fetch(
+          "https://ielts-backend-4f68.onrender.com/api/questions"
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch questions");
         }

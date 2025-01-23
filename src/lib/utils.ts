@@ -13,11 +13,14 @@ export async function sendQuestionData(
   answer: string
 ) {
   try {
-    const data = await axios.post("http://localhost:8000/api/answers", {
-      userId,
-      question,
-      answer,
-    });
+    const data = await axios.post(
+      "https://ielts-backend-4f68.onrender.com/api/answers",
+      {
+        userId,
+        question,
+        answer,
+      }
+    );
     if (data.status === 200) {
       console.log("Answer submitted successfully");
       toast("Answer submitted successfully");
@@ -29,7 +32,9 @@ export async function sendQuestionData(
 
 export async function fetchResults(userId: string) {
   try {
-    const data = await axios.get(`http://localhost:8000/api/answers/${userId}`);
+    const data = await axios.get(
+      `https://ielts-backend-4f68.onrender.com/api/answers/${userId}`
+    );
     if (data.status === 200) {
       console.log("Results fetched successfully");
       toast("Results fetched successfully");
