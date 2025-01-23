@@ -1,15 +1,14 @@
 import "regenerator-runtime/runtime";
 
 import { ChevronLeft, ChevronRight, Target, Volume2 } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { useCallback, useEffect, useState } from "react";
 import { useSpeechSynthesis } from "@/hooks/useSpeechSynthesis";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
 import { sendQuestionData } from "@/lib/utils";
-import { UserButton, useUser } from "@clerk/clerk-react";
-import { NavLink } from "react-router";
+import { UserButton } from "@clerk/clerk-react";
 
 interface Question {
   id: number;
@@ -40,12 +39,6 @@ const TestInterface = ({ userId }: TestInterfaceProps) => {
   const { speak } = useSpeechSynthesis();
   const [hasNarrated, setHasNarrated] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
-  const { user } = useUser();
-  // const userId = user?.id;
-
-  // if (!user || !userId) {
-  //   window.location.href = "/sign-in";
-  // }
 
   const {
     transcript,
@@ -154,8 +147,11 @@ const TestInterface = ({ userId }: TestInterfaceProps) => {
 
   return (
     <div className="flex flex-col h-screen justify-between">
-      <div className=" flex items-center justify-between bg-zinc-200 px-4">
-        <h1 className="text-center font-bold text-2xl py-4 ">IELTS Test</h1>
+      <div className="flex items-center justify-between pt-2 px-4">
+        <div>
+          <h1 className="font-bold text-3xl">IELTS Test</h1>
+          <p className="text-lg text-muted-foreground">Attend the IELTS test</p>
+        </div>
         <UserButton />
       </div>
       <div className="text-center py-4">
@@ -199,7 +195,11 @@ const TestInterface = ({ userId }: TestInterfaceProps) => {
             <ChevronLeft className="mr-1" /> Prev
           </Button>
           {isLastQuestion || !questions.length ? (
-            <Button className="">
+            <Button
+              onClick={() => {
+                window.location.href = "/feedback";
+              }}
+            >
               <Target className="mr-1" /> Submit
             </Button>
           ) : (

@@ -26,3 +26,15 @@ export async function sendQuestionData(
     console.error(error);
   }
 }
+
+export async function fetchResults(userId: string) {
+  try {
+    const data = await axios.get(`http://localhost:8000/api/answers/${userId}`);
+    if (data.status === 200) {
+      console.log("Results fetched successfully");
+      return data.data;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
