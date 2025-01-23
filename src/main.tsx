@@ -1,11 +1,12 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import { ClerkProvider, SignIn, SignUp } from "@clerk/clerk-react";
+import { ClerkProvider, SignUp } from "@clerk/clerk-react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/App.tsx";
 import { Toaster } from "sonner";
 import FeedbackRoute from "./pages/feedback.tsx";
+import Authentication from "./pages/auth.tsx";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -27,14 +28,7 @@ createRoot(document.getElementById("root")!).render(
               </div>
             }
           />
-          <Route
-            path="/sign-in"
-            element={
-              <div className="flex justify-center items-center h-screen">
-                <SignIn />
-              </div>
-            }
-          />
+          <Route path="/sign-in" element={<Authentication />} />
           <Route path="/feedback" element={<FeedbackRoute />} />
         </Routes>
       </BrowserRouter>
