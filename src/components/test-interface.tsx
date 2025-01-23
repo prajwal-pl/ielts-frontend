@@ -1,7 +1,15 @@
+import "regenerator-runtime/runtime";
+
 import { ChevronLeft, ChevronRight, Target, Volume2 } from "lucide-react";
 import { Button } from "./ui/button";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSpeechSynthesis } from "@/hooks/useSpeechSynthesis";
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from "react-speech-recognition";
+import { sendQuestionData } from "@/lib/utils";
+import { UserButton, useUser } from "@clerk/clerk-react";
+import { NavLink } from "react-router";
 
 interface Question {
   id: number;
@@ -21,12 +29,30 @@ interface DisplayQuestion {
   subQuestions?: string[];
 }
 
-const TestInterface = () => {
+interface TestInterfaceProps {
+  userId: string | null;
+}
+
+const TestInterface = ({ userId }: TestInterfaceProps) => {
   const [questionData, setQuestionData] = useState<Part[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const { speak } = useSpeechSynthesis();
   const [hasNarrated, setHasNarrated] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const { user } = useUser();
+  // const userId = user?.id;
+
+  // if (!user || !userId) {
+  //   window.location.href = "/sign-in";
+  // }
+
+  const {
+    transcript,
+    listening,
+    resetTranscript,
+    browserSupportsSpeechRecognition,
+  } = useSpeechRecognition();
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -100,14 +126,37 @@ const TestInterface = () => {
     }
   }, [currentQuestion, hasNarrated, speak]);
 
+  const handleRecording = useCallback(() => {
+    if (!isRecording) {
+      setIsRecording(true);
+      SpeechRecognition.startListening({ continuous: true });
+    } else {
+      setIsRecording(false);
+      SpeechRecognition.stopListening();
+      if (transcript.length > 1 && currentQuestion) {
+        console.log("Transcript: ", transcript);
+        sendQuestionData(userId!, currentQuestion.text, transcript);
+      }
+    }
+  }, [isRecording, transcript, currentQuestion]);
+
   if (error) {
     return <div className="text-center text-red-500 p-4">{error}</div>;
   }
 
+  if (!browserSupportsSpeechRecognition) {
+    return (
+      <div className="text-center text-red-500 p-4">
+        Speech recognition is not supported in your browser.
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col h-screen justify-between">
-      <div className="text-center">
-        <h1 className="font-bold text-2xl py-4 bg-zinc-200">IELTS Test</h1>
+      <div className=" flex items-center justify-between bg-zinc-200 px-4">
+        <h1 className="text-center font-bold text-2xl py-4 ">IELTS Test</h1>
+        <UserButton />
       </div>
       <div className="text-center py-4">
         <div className="font-semibold text-xl">
@@ -132,9 +181,13 @@ const TestInterface = () => {
 
       <div>
         <div className="flex justify-center items-center mb-4">
-          <Button className="w-1/2">
+          <Button
+            className="w-1/2"
+            onClick={handleRecording}
+            disabled={!currentQuestion}
+          >
             <Volume2 className="mr-2" />
-            Start Recording
+            {listening ? "Stop Recording" : "Start Recording"}
           </Button>
         </div>
         <div className="flex justify-between w-full px-4 py-2 pb-4">

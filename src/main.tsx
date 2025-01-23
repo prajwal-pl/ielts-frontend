@@ -5,6 +5,7 @@ import App from "./App.tsx";
 import { ClerkProvider, SignIn, SignUp } from "@clerk/clerk-react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./App.tsx";
+import { Toaster } from "sonner";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -36,6 +37,7 @@ createRoot(document.getElementById("root")!).render(
           />
         </Routes>
       </BrowserRouter>
+      <Toaster />
     </ClerkProvider>
   </StrictMode>
 );
