@@ -5,7 +5,6 @@ import { ClerkProvider, SignIn, SignUp } from "@clerk/clerk-react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/App.tsx";
 import { Toaster } from "sonner";
-import Feedback from "./components/global/feedback.tsx";
 import FeedbackRoute from "./pages/feedback.tsx";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;

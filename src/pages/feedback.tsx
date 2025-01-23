@@ -1,10 +1,7 @@
 import Feedback from "@/components/global/feedback";
 import { useUser } from "@clerk/clerk-react";
-import React from "react";
 
-type Props = {};
-
-const FeedbackRoute = (props: Props) => {
+const FeedbackRoute = () => {
   const { user } = useUser();
   const userId = user?.id;
 

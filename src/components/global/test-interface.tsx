@@ -40,12 +40,8 @@ const TestInterface = ({ userId }: TestInterfaceProps) => {
   const [hasNarrated, setHasNarrated] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
 
-  const {
-    transcript,
-    listening,
-    resetTranscript,
-    browserSupportsSpeechRecognition,
-  } = useSpeechRecognition();
+  const { transcript, listening, browserSupportsSpeechRecognition } =
+    useSpeechRecognition();
 
   useEffect(() => {
     const fetchQuestions = async () => {
