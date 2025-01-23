@@ -32,6 +32,7 @@ export async function fetchResults(userId: string) {
     const data = await axios.get(`http://localhost:8000/api/answers/${userId}`);
     if (data.status === 200) {
       console.log("Results fetched successfully");
+      toast("Results fetched successfully");
       return data.data;
     }
   } catch (error) {
