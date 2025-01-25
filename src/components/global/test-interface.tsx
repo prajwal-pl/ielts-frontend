@@ -36,7 +36,7 @@ const TestInterface = ({ userId }: TestInterfaceProps) => {
   const [questionData, setQuestionData] = useState<Part[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
-  const { speak } = useSpeechSynthesis();
+  const { speak, cancel } = useSpeechSynthesis();
   const [hasNarrated, setHasNarrated] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
 
@@ -195,6 +195,7 @@ const TestInterface = ({ userId }: TestInterfaceProps) => {
           {isLastQuestion || !questions.length ? (
             <Button
               onClick={() => {
+                cancel();
                 window.location.href = "/feedback";
               }}
             >
